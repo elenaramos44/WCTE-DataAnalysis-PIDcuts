@@ -1,24 +1,12 @@
 {
     "1670": {
         "box": {
-            "electron": {
-                "tof_min": 13.4,
-                "tof_max": 14.4,
-                "act_min": 9500.0,
-                "act_max": 16500.0
-            },
-            "muon": {
-                "tof_min": 14.4,
-                "tof_max": 15.4,
-                "act_min": 4000.0,
-                "act_max": 11500.0
-            },
-            "pion": {
-                "tof_min": 14.6,
-                "tof_max": 16.0,
-                "act_min": 0.0,
-                "act_max": 2000.0
-            }
+            "electron": { "tof_min": 13.4, "tof_max": 14.4,"act_min": 9500.0,"act_max": 16500.0},
+            "muon": {"tof_min": 14.4,"tof_max": 15.4,"act_min": 4000.0,"act_max": 11500.0},
+            "pion": {"tof_min": 14.6,"tof_max": 16.0,"act_min": 0.0,"act_max": 2000.0}
+        },
+        "dataquality": {
+            "GoodRun": true
         }
     }
 }

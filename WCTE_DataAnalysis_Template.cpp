@@ -14,6 +14,7 @@
 #include <fstream>
 #include <vector>
 #include "WCTE_BeamMon_PID.h"
+#include "WCTE_DataQuality.h"
 
 int main(int argc, char* argv[]) {
     if (argc < 3) {
@@ -47,12 +48,6 @@ int main(int argc, char* argv[]) {
     tree->SetBranchAddress("beamline_pmt_tdc_times", &brb_tdc);
     tree->SetBranchAddress("beamline_pmt_tdc_ids", &brb_tdc_ids);
 
-    WCTE_BeamMon_PID pid;
-    if (!pid.LoadBoxCuts(boxcutfile)) {
-        std::cerr << "Failed to load boxcuts from file." << std::endl;
-        return 1;
-    }
-
     std::string fname = gSystem->BaseName(filename.c_str());
     size_t pos1 = fname.find("R");
     size_t pos2 = fname.find("S");
@@ -61,6 +56,23 @@ int main(int argc, char* argv[]) {
         run_id = std::stoi(fname.substr(pos1+1, pos2-pos1-1));
     } else {
         std::cerr << "Cannot extract run number from filename!" << std::endl;
+        return 1;
+    }
+
+    WCTE_DataQuality dq;
+    if (!dq.LoadQualityInfo(boxcutfile)) {
+        std::cerr << "Failed to load data quality info." << std::endl;
+        return 1;
+    }
+    dq.SetRunID(run_id);
+    if (!dq.IsGoodRun()) {
+        std::cerr << "Run " << run_id << " is marked as BAD. Exiting." << std::endl;
+        return 1;
+    }
+
+    WCTE_BeamMon_PID pid;
+    if (!pid.LoadBoxCuts(boxcutfile)) {
+        std::cerr << "Failed to load boxcuts from file." << std::endl;
         return 1;
     }
     pid.SetRunID(run_id);
@@ -103,9 +115,8 @@ int main(int argc, char* argv[]) {
     }
 
     TCanvas* c = new TCanvas("c", "PID Plots", 1200, 800);
-    c->Print((output_pdf + "(").c_str()); // Open file
+    c->Print((output_pdf + "(").c_str());
 
-    // Title page
     c->Clear();
     TText* title = new TText(0.5, 0.7, "Event Selection Plots");
     title->SetTextAlign(22);
@@ -117,8 +128,7 @@ int main(int argc, char* argv[]) {
     fname_text->SetTextAlign(22);
     fname_text->SetTextSize(0.03);
     fname_text->Draw();
-
-    c->Print(output_pdf.c_str()); // Save the title page
+    c->Print(output_pdf.c_str());
 
     c->Clear();
     h_all_tof_vs_act->Draw("colz");
@@ -127,9 +137,7 @@ int main(int argc, char* argv[]) {
     c->Clear();
     TGraph* graph_all = new TGraph(h_all_tof_vs_act->GetEntries());
     TGraph* graph_pid[3];
-    for (int i = 0; i < 3; ++i) {
-        graph_pid[i] = new TGraph(h_pid_tof_vs_act[i]->GetEntries());
-    }
+    for (int i = 0; i < 3; ++i) graph_pid[i] = new TGraph(h_pid_tof_vs_act[i]->GetEntries());
 
     int idx_all = 0;
     for (int ix = 1; ix <= h_all_tof_vs_act->GetNbinsX(); ++ix) {
@@ -168,15 +176,12 @@ int main(int argc, char* argv[]) {
 
     TLegend* leg = new TLegend(0.65, 0.7, 0.88, 0.88);
     leg->AddEntry(graph_all, "All", "p");
-    for (int i = 0; i < 3; ++i) {
-        leg->AddEntry(graph_pid[i], types[i], "p");
-    }
+    for (int i = 0; i < 3; ++i) leg->AddEntry(graph_pid[i], types[i], "p");
     leg->Draw();
     c->Print(output_pdf.c_str());
 
     c->Clear();
     c->Divide(1,2);
-
     c->cd(1);
     h_all_tof->SetLineColor(kBlack);
     h_all_tof->Draw("hist");
@@ -194,7 +199,6 @@ int main(int argc, char* argv[]) {
     }
 
     c->Print((output_pdf + ")").c_str());
-
     fileBRB->Close();
     return 0;
 }

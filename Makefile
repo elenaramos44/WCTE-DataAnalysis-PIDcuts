@@ -27,7 +27,7 @@ BRB_hitPMT_plots: BRB_hitPMT_plots.cpp
 BRB_Internal_Comparison: BRB_Internal_Comparison.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $< $(LDLIBS)
 
-WCTE_DataAnalysis_Template: WCTE_DataAnalysis_Template.cpp WCTE_BeamMon_PID.cpp
+WCTE_DataAnalysis_Template: WCTE_DataAnalysis_Template.cpp WCTE_BeamMon_PID.cpp WCTE_DataQuality.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDLIBS)
 
 clean:
