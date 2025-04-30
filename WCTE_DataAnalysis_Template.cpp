@@ -38,6 +38,76 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+
+        // Scalar branches
+    double window_time;
+    Long_t start_counter;
+    int run_id, sub_run_id, spill_counter, event_number, readout_number;
+
+    // Vector branches
+    std::vector<int>    *trigger_types = nullptr;
+    std::vector<double> *trigger_times = nullptr;
+
+    std::vector<float>  *led_gains = nullptr;
+    std::vector<float>  *led_dacsettings = nullptr;
+    std::vector<int>    *led_ids = nullptr;
+    std::vector<int>    *led_card_ids = nullptr;
+    std::vector<int>    *led_slot_numbers = nullptr;
+    std::vector<int>    *led_event_types = nullptr;
+    std::vector<int>    *led_types = nullptr;
+    std::vector<int>    *led_sequence_numbers = nullptr;
+    std::vector<int>    *led_counters = nullptr;
+
+    std::vector<int>    *hit_mpmt_card_ids = nullptr;
+    std::vector<int>    *hit_pmt_channel_ids = nullptr;
+    std::vector<int>    *hit_mpmt_slot_ids = nullptr;
+    std::vector<int>    *hit_pmt_position_ids = nullptr;
+    std::vector<float>  *hit_pmt_charges = nullptr;
+    std::vector<double> *hit_pmt_times = nullptr;
+
+    std::vector<int>    *pmt_waveform_mpmt_card_ids = nullptr;
+    std::vector<int>    *pmt_waveform_pmt_channel_ids = nullptr;
+    std::vector<int>    *pmt_waveform_mpmt_slot_ids = nullptr;
+    std::vector<int>    *pmt_waveform_pmt_position_ids = nullptr;
+    std::vector<double> *pmt_waveform_times = nullptr;
+    std::vector<std::vector<double>> *pmt_waveforms = nullptr;
+
+    // Set branch addresses
+    tree->SetBranchAddress("window_time", &window_time);
+    tree->SetBranchAddress("start_counter", &start_counter);
+    tree->SetBranchAddress("run_id", &run_id);
+    tree->SetBranchAddress("sub_run_id", &sub_run_id);
+    tree->SetBranchAddress("spill_counter", &spill_counter);
+    tree->SetBranchAddress("event_number", &event_number);
+    tree->SetBranchAddress("readout_number", &readout_number);
+
+    tree->SetBranchAddress("trigger_types", &trigger_types);
+    tree->SetBranchAddress("trigger_times", &trigger_times);
+
+    tree->SetBranchAddress("led_gains", &led_gains);
+    tree->SetBranchAddress("led_dacsettings", &led_dacsettings);
+    tree->SetBranchAddress("led_ids", &led_ids);
+    tree->SetBranchAddress("led_card_ids", &led_card_ids);
+    tree->SetBranchAddress("led_slot_numbers", &led_slot_numbers);
+    tree->SetBranchAddress("led_event_types", &led_event_types);
+    tree->SetBranchAddress("led_types", &led_types);
+    tree->SetBranchAddress("led_sequence_numbers", &led_sequence_numbers);
+    tree->SetBranchAddress("led_counters", &led_counters);
+
+    tree->SetBranchAddress("hit_mpmt_card_ids", &hit_mpmt_card_ids);
+    tree->SetBranchAddress("hit_pmt_channel_ids", &hit_pmt_channel_ids);
+    tree->SetBranchAddress("hit_mpmt_slot_ids", &hit_mpmt_slot_ids);
+    tree->SetBranchAddress("hit_pmt_position_ids", &hit_pmt_position_ids);
+    tree->SetBranchAddress("hit_pmt_charges", &hit_pmt_charges);
+    tree->SetBranchAddress("hit_pmt_times", &hit_pmt_times);
+
+    tree->SetBranchAddress("pmt_waveform_mpmt_card_ids", &pmt_waveform_mpmt_card_ids);
+    tree->SetBranchAddress("pmt_waveform_pmt_channel_ids", &pmt_waveform_pmt_channel_ids);
+    tree->SetBranchAddress("pmt_waveform_mpmt_slot_ids", &pmt_waveform_mpmt_slot_ids);
+    tree->SetBranchAddress("pmt_waveform_pmt_position_ids", &pmt_waveform_pmt_position_ids);
+    tree->SetBranchAddress("pmt_waveform_times", &pmt_waveform_times);
+    tree->SetBranchAddress("pmt_waveforms", &pmt_waveforms);
+
     std::vector<float>* brb_qdc = nullptr;
     std::vector<int>*   brb_qdc_ids = nullptr;
     std::vector<float>* brb_tdc = nullptr;
@@ -51,7 +121,8 @@ int main(int argc, char* argv[]) {
     std::string fname = gSystem->BaseName(filename.c_str());
     size_t pos1 = fname.find("R");
     size_t pos2 = fname.find("S");
-    int run_id = 0;
+    run_id = 0;
+
     if (pos1 != std::string::npos && pos2 != std::string::npos && pos2 > pos1) {
         run_id = std::stoi(fname.substr(pos1+1, pos2-pos1-1));
     } else {
