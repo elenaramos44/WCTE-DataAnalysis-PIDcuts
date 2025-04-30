@@ -16,10 +16,12 @@ public:
                          const std::vector<int>*   tdc_ids);
 
     bool LoadBoxCuts(const std::string& json_filename);
-
+    void SetPIDMethod(const std::string& method);
+    
     double GetTofT0T1() const;
     double GetActGroup2Sum() const;
-    int GetParticleIDBox() const;
+    int GetParticleID() const;      // Dispatching function
+    int GetParticleIDBox() const;   // Box cut logic
     bool EventPassesCuts() const;
 
 private:
@@ -35,9 +37,10 @@ private:
     };
 
     int current_run_id_ = -1;
+    std::string pid_method_ = "box";  // Default
+
     std::map<int, BoxDefinitions> run_boxcuts_;
 
-    // Pointers to BRB data vectors
     const std::vector<float>* qdc_charge_ = nullptr;
     const std::vector<int>*   qdc_ids_    = nullptr;
     const std::vector<float>* tdc_time_   = nullptr;

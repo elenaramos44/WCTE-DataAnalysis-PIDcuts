@@ -70,12 +70,14 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+
     WCTE_BeamMon_PID pid;
     if (!pid.LoadBoxCuts(boxcutfile)) {
         std::cerr << "Failed to load boxcuts from file." << std::endl;
         return 1;
     }
     pid.SetRunID(run_id);
+    pid.SetPIDMethod("box");
 
     TH2D* h_all_tof_vs_act = new TH2D("h_all_tof_vs_act", "ACT3-5 vs TOF (All);T1-T0 (ns);ACT3-5 QDC Sum", 100, 10, 20, 500, 0, 20000);
     TH1D* h_all_tof = new TH1D("h_all_tof", "TOF (All);T1-T0 (ns);Counts", 100, 10, 20);
@@ -94,7 +96,7 @@ int main(int argc, char* argv[]) {
         h_pid_act[i] = new TH1D(Form("h_%s_act", types[i]), "", 500, 0, 20000);
     }
 
-    Long64_t nEntries = std::min(tree->GetEntries(), (Long64_t)5000);
+    Long64_t nEntries = std::min(tree->GetEntries(), (Long64_t)500000);
     for (Long64_t i = 0; i < nEntries; ++i) {
         tree->GetEntry(i);
         pid.SetBeamlineData(brb_qdc, brb_qdc_ids, brb_tdc, brb_tdc_ids);
@@ -108,7 +110,7 @@ int main(int argc, char* argv[]) {
         h_all_tof->Fill(tof);
         h_all_act->Fill(act);
 
-        int pid_code = pid.GetParticleIDBox();
+        int pid_code = pid.GetParticleID();
         if (pid_code == 11) { h_pid_tof_vs_act[0]->Fill(tof, act); h_pid_tof[0]->Fill(tof); h_pid_act[0]->Fill(act); }
         else if (pid_code == 13) { h_pid_tof_vs_act[1]->Fill(tof, act); h_pid_tof[1]->Fill(tof); h_pid_act[1]->Fill(act); }
         else if (pid_code == 211) { h_pid_tof_vs_act[2]->Fill(tof, act); h_pid_tof[2]->Fill(tof); h_pid_act[2]->Fill(act); }

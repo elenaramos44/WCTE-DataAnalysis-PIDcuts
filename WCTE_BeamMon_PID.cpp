@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <nlohmann/json.hpp>
+#include <stdexcept>
 
 using json = nlohmann::json;
 
@@ -169,3 +170,17 @@ int WCTE_BeamMon_PID::GetParticleIDBox() const {
 
     return 0;
 }
+
+
+void WCTE_BeamMon_PID::SetPIDMethod(const std::string& method) {
+    pid_method_ = method;
+}
+
+int WCTE_BeamMon_PID::GetParticleID() const {
+    if (pid_method_ == "box") {
+        return GetParticleIDBox();
+    }
+    std::cerr << "Unknown PID method: " << pid_method_ << std::endl;
+    return 0;
+}
+
