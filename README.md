@@ -28,18 +28,19 @@ make
 - **boxcuts.json**  
   Configuration file storing PID selection cuts (under `"box"`) and data quality flags (under `"quality"`) for each run ID. Example structure:
   ```json
-  {
+  
     "1670": {
-      "box": {
-        "electron": { "tof_min": 10.0, "tof_max": 15.0, "act_min": 0.0, "act_max": 1000.0 },
-        "muon":     { "tof_min": 15.0, "tof_max": 18.0, "act_min": 0.0, "act_max": 1000.0 },
-        "pion":     { "tof_min": 18.0, "tof_max": 22.0, "act_min": 1000.0, "act_max": 5000.0 }
-      },
-      "quality": {
-        "GoodRun": true
-      }
+        "box": {
+            "electron": { "tof_min": 13.4, "tof_max": 14.4,"act_min": 9500.0,"act_max": 16500.0},
+            "muon": {"tof_min": 14.4,"tof_max": 15.4,"act_min": 4000.0,"act_max": 11500.0},
+            "pion": {"tof_min": 14.6,"tof_max": 16.0,"act_min": 0.0,"act_max": 2000.0}
+        },
+        "dataquality": {
+            "GoodRun": true
+        }
     }
-  }
+}
+
   ```
 
 ---
