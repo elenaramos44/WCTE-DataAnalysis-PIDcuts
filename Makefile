@@ -11,7 +11,8 @@ TARGETS = \
     WCTE_DataAnalysis_Template \
     WCTE_TPMT_Analysis \
     WCTE_TOFCardAnalysis \
-    Utility_test
+    Utility_test \
+    WCTE_CreatePIDFilteredSample
 
 all: $(TARGETS)
 
@@ -31,6 +32,9 @@ BRB_Internal_Comparison: BRB_Internal_Comparison.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $< $(LDLIBS)
 
 WCTE_DataAnalysis_Template: WCTE_DataAnalysis_Template.cpp WCTE_BeamMon_PID.cpp WCTE_DataQuality.cpp
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDLIBS)
+
+WCTE_CreatePIDFilteredSample: WCTE_CreatePIDFilteredSample.cpp WCTE_BeamMon_PID.cpp WCTE_DataQuality.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDLIBS)
 
 WCTE_TPMT_Analysis: WCTE_TPMT_Analysis.cpp WCTE_Utility.cpp
