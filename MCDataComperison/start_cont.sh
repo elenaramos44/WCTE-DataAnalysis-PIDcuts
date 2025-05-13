@@ -1,0 +1,1 @@
+singularity shell --fakeroot --bind $PWD:/home -w --env DISPLAY=$DISPLAY ./WCSim
